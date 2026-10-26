@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Inventario de productos</title>
+</head>
+<body>
+
+    <h1>Inventario de productos</h1>
+
+    {% if messages %}
+        {% for message in messages %}
+            <p>{{ message }}</p>
+        {% endfor %}
+    {% endif %}
+
+    <p>
+        <a href="{% url 'productos:crear' %}">
+            Registrar nuevo producto
+        </a>
+    </p>
+
+        <p>
+        <a href="{% url 'categorias:listar' %}">
+            Ver categorías
+        </a>
+    </p>
+
+    <hr>
+
+    {% for producto in productos %}
+
+        <h2>{{ producto.nombre }}</h2>
+
+        <p>
+            <strong>Precio:</strong>
+            ${{ producto.precio }}
+        </p>
+
+        <p>
+            <strong>Cantidad disponible:</strong>
+            {{ producto.cantidad }}
+        </p>
+
+                <p>
+            <strong>Categoría:</strong>
+            {{ producto.categoria_nombre }}
+        </p>
+
+        <p>
+            <a href="{% url 'productos:editar' producto.id %}">
+                Editar
+            </a>
+        </p>
+
+        <form
+            method="POST"
+            action="{% url 'productos:eliminar' producto.id %}"
+        >
+            {% csrf_token %}
+
+            <button
+                type="submit"
+                onclick="return confirm('¿Deseas eliminar este producto?')"
+            >
+                Eliminar
+            </button>
+        </form>
+
+        <hr>
+
+    {% empty %}
+
+        <p>No hay productos registrados.</p>
+
+    {% endfor %}
+
+</body>
+</html>

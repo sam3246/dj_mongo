@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Formulario de productos</title>
+</head>
+<body>
+
+    <h1>
+        {% if producto %}
+            Editar producto
+        {% else %}
+            Registrar producto
+        {% endif %}
+    </h1>
+
+    {% if messages %}
+        {% for message in messages %}
+            <p>{{ message }}</p>
+        {% endfor %}
+    {% endif %}
+
+    <form method="POST">
+        {% csrf_token %}
+
+        <p>
+            <label for="nombre">Nombre del producto:</label><br>
+            <input
+                id="nombre"
+                type="text"
+                name="nombre"
+                maxlength="100"
+                value="{{ producto.nombre|default:'' }}"
+                required
+            >
+        </p>
+
+        <p>
+            <label for="precio">Precio:</label><br>
+            <input
+                id="precio"
+                type="number"
+                name="precio"
+                min="0"
+                step="0.01"
+                value="{{ producto.precio|default:'' }}"
+                required
+            >
+        </p>
+
+        <p>
+            <label for="cantidad">Cantidad disponible:</label><br>
+            <input
+                id="cantidad"
+                type="number"
+                name="cantidad"
+                min="0"
+                step="1"
+                value="{{ producto.cantidad|default:'' }}"
+                required
+            >
+        </p>
+
+
+                <p>
+            <label for="categoria_id">Categoría:</label><br>
+            <select id="categoria_id" name="categoria_id" required>
+                <option value="">-- Selecciona una categoría --</option>
+                {% for categoria in categorias %}
+                    <option
+                        value="{{ categoria.id }}"
+                        {% if producto.categoria_id|stringformat:"s" == categoria.id %}selected{% endif %}
+                    >
+                        {{ categoria.nombre }}
+                    </option>
+                {% endfor %}
+            </select>
+        </p>
+
+        {% if not categorias %}
+            <p>
+                Primero debes crear una categoría.
+                <a href="{% url 'categorias:crear' %}">Crear categoría</a>
+            </p>
+        {% endif %}
+
+        <button type="submit">Guardar producto</button>
+    </form>
+
+    <p>
+        <a href="{% url 'productos:listar' %}">
+            Volver al inventario
+        </a>
+    </p>
+
+</body>
+</html>

@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Formulario de categoría</title>
+</head>
+<body>
+
+    <h1>Formulario de categoría</h1>
+
+    {% if messages %}
+        {% for message in messages %}
+            <p>{{ message }}</p>
+        {% endfor %}
+    {% endif %}
+
+    <form method="POST">
+        {% csrf_token %}
+
+        <p>
+            <label for="nombre">Nombre de la categoría:</label><br>
+            <input
+                id="nombre"
+                type="text"
+                name="nombre"
+                maxlength="50"
+                value="{{ categoria.nombre|default:'' }}"
+                required
+            >
+        </p>
+
+        <p>
+            <label for="descripcion">Descripción:</label><br>
+            <textarea
+                id="descripcion"
+                name="descripcion"
+                maxlength="200"
+                rows="4"
+            >{{ categoria.descripcion|default:'' }}</textarea>
+        </p>
+
+        <button type="submit">Guardar categoría</button>
+    </form>
+
+    <p>
+        <a href="{% url 'categorias:listar' %}">
+            Volver a categorías
+        </a>
+    </p>
+
+</body>
+</html>

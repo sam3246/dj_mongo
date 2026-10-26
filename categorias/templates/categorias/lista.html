@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Categorías</title>
+</head>
+<body>
+
+    <h1>Categorías</h1>
+
+    {% if messages %}
+        {% for message in messages %}
+            <p>{{ message }}</p>
+        {% endfor %}
+    {% endif %}
+
+    <p>
+        <a href="{% url 'categorias:crear' %}">
+            Registrar nueva categoría
+        </a>
+    </p>
+
+    <p>
+        <a href="{% url 'productos:listar' %}">
+            Volver al inventario
+        </a>
+    </p>
+
+    <hr>
+
+    {% for categoria in categorias %}
+
+        <h2>{{ categoria.nombre }}</h2>
+
+        <p>
+            <strong>Descripción:</strong>
+            {{ categoria.descripcion }}
+        </p>
+
+        <p>
+            <a href="{% url 'categorias:editar' categoria.id %}">
+                Editar
+            </a>
+        </p>
+
+        <form
+            method="POST"
+            action="{% url 'categorias:eliminar' categoria.id %}"
+        >
+            {% csrf_token %}
+
+            <button
+                type="submit"
+                onclick="return confirm('¿Deseas eliminar esta categoría?')"
+            >
+                Eliminar
+            </button>
+        </form>
+
+        <hr>
+
+    {% empty %}
+
+        <p>No hay categorías registradas.</p>
+
+    {% endfor %}
+
+</body>
+</html>
