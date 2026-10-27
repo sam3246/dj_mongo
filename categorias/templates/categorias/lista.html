@@ -4,6 +4,23 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Categorías</title>
+    <style>
+        * { box-sizing: border-box; }
+        body { max-width: 850px; margin: 40px auto; padding: 0 20px; font-family: Arial, sans-serif; color: #24323d; background: #f3f6f5; }
+        h1 { color: #176b58; }
+        h2 { margin-top: 0; }
+        .acciones { display: flex; flex-wrap: wrap; gap: 12px; margin: 20px 0; }
+        .categoria { margin: 16px 0; padding: 20px; background: #fff; border: 1px solid #dce5e1; border-radius: 8px; }
+        .boton { display: inline-block; padding: 10px 15px; border: 0; border-radius: 5px; color: #fff; background: #176b58; font: inherit; font-weight: 600; text-decoration: none; cursor: pointer; transition: background-color .18s ease, color .18s ease, transform .18s ease; }
+        .boton:hover { color: #fff; background: #105341; transform: translateY(-1px); }
+        .boton:active { transform: translateY(1px); }
+        .boton-secundario { color: #176b58; background: #e2f0eb; }
+        .boton-secundario:hover { color: #fff; background: #176b58; }
+        .boton-peligro { background: #b23a3a; }
+        .boton-peligro:hover { background: #8d2929; }
+        a:focus-visible, button:focus-visible { outline: 3px solid #80c4ad; outline-offset: 3px; }
+        @media (max-width: 480px) { body { margin-top: 24px; } .acciones { flex-direction: column; align-items: flex-start; } }
+    </style>
 </head>
 <body>
 
@@ -15,22 +32,21 @@
         {% endfor %}
     {% endif %}
 
-    <p>
-        <a href="{% url 'categorias:crear' %}">
+    <div class="acciones">
+        <a class="boton" href="{% url 'categorias:crear' %}">
             Registrar nueva categoría
         </a>
-    </p>
 
-    <p>
-        <a href="{% url 'productos:listar' %}">
+        <a class="boton boton-secundario" href="{% url 'productos:listar' %}">
             Volver al inventario
         </a>
-    </p>
+    </div>
 
     <hr>
 
     {% for categoria in categorias %}
 
+        <article class="categoria">
         <h2>{{ categoria.nombre }}</h2>
 
         <p>
@@ -39,7 +55,7 @@
         </p>
 
         <p>
-            <a href="{% url 'categorias:editar' categoria.id %}">
+            <a class="boton boton-secundario" href="{% url 'categorias:editar' categoria.id %}">
                 Editar
             </a>
         </p>
@@ -51,6 +67,7 @@
             {% csrf_token %}
 
             <button
+                class="boton boton-peligro"
                 type="submit"
                 onclick="return confirm('¿Deseas eliminar esta categoría?')"
             >
@@ -58,7 +75,7 @@
             </button>
         </form>
 
-        <hr>
+        </article>
 
     {% empty %}
 
